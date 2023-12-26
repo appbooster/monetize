@@ -28,10 +28,14 @@ module Monetize
       'S$' => 'SGD',
       'HK$' => 'HKD',
       'NT$' => 'TWD',
-      '₱' => 'PHP'
+      '₱' => 'PHP',
+      'р.' => 'RUB',
+      'TL' => 'TRY',
+      'NIS' => 'ILS',
+      '₪' => 'ILS'
     }.freeze
 
-    TWO_DIGIT_SYMBOLS = %w[HK NT RM].freeze
+    EXCEPTIONAL_SYMBOLS = %w[HK NT RM TL NIS].freeze
     MULTIPLIER_SUFFIXES = Hash.new(0).merge({'K' => 3, 'M' => 6, 'B' => 9, 'T' => 12}).freeze
     MULTIPLIER_REGEXP = Regexp.new(format('^(.*?\d)(%s)\b([^\d]*)$', MULTIPLIER_SUFFIXES.keys.join('|')), 'i')
 
@@ -75,7 +79,7 @@ module Monetize
 
     def parse_currency
       computed_currency = input[/[A-Z]{2,3}/]
-      computed_currency = nil if TWO_DIGIT_SYMBOLS.include?(computed_currency)
+      computed_currency = nil if EXCEPTIONAL_SYMBOLS.include?(computed_currency)
       computed_currency ||= compute_currency if assume_from_symbol?
 
       Money::Currency.wrap(computed_currency)
