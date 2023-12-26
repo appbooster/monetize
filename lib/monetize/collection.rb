@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require 'forwardable'
 
@@ -15,11 +15,9 @@ module Monetize
     end
 
     def initialize(input, currency = Money.default_currency, options = {})
-      if input.respond_to? :strip
-        @input = input.clone.strip
-      else
-        fail ArgumentError, 'Input must be a string'
-      end
+      raise ArgumentError, 'Input must be a string' unless input.respond_to? :strip
+
+      @input = input.clone.strip
 
       @currency = currency
       @options = options
@@ -27,11 +25,11 @@ module Monetize
     end
 
     def parse
-      if range?
-        @list = split_range.map { |fragment| Monetize.parse(fragment, currency, options) }
-      else
-        @list = split_list.map { |fragment| Monetize.parse(fragment, currency, options) }
-      end
+      @list = if range?
+                split_range.map { |fragment| Monetize.parse(fragment, currency, options) }
+              else
+                split_list.map { |fragment| Monetize.parse(fragment, currency, options) }
+              end
 
       self
     end

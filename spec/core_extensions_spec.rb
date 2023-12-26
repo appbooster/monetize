@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require 'spec_helper'
 require 'monetize'
@@ -57,68 +57,68 @@ describe Monetize, 'core extensions' do
   describe String do
     describe '#to_money' do
       STRING_TO_MONEY = {
-        '20.15'           => Money.new(20_15),
-        '100'             => Money.new(100_00),
-        '100.37'          => Money.new(100_37),
-        '100,37'          => Money.new(100_37),
-        '100 000'         => Money.new(100_000_00),
-        '100,000.00'      => Money.new(100_000_00),
-        '1,000'           => Money.new(1_000_00),
-        '-1,000'          => Money.new(-1_000_00),
-        '1,000.5'         => Money.new(1_000_50),
-        '1,000.51'        => Money.new(1_000_51),
-        '1,000.505'       => Money.new(1_000_50), # ROUND_HALF_EVEN default bankers rounding
-        '1,000.515'       => Money.new(1_000_52), # ROUND_HALF_EVEN default bankers rounding
-        '1,000.504'       => Money.new(1_000_50),
-        '1,000.0000'      => Money.new(1_000_00),
-        '1,000.5000'      => Money.new(1_000_50),
-        '1,000.5099'      => Money.new(1_000_51),
-        '1.550'           => Money.new(1_55),
-        '25.'             => Money.new(25_00),
-        '.75'             => Money.new(75),
+        '20.15' => Money.new(20_15),
+        '100' => Money.new(100_00),
+        '100.37' => Money.new(100_37),
+        '100,37' => Money.new(100_37),
+        '100 000' => Money.new(100_000_00),
+        '100,000.00' => Money.new(100_000_00),
+        '1,000' => Money.new(1_000_00),
+        '-1,000' => Money.new(-1_000_00),
+        '1,000.5' => Money.new(1_000_50),
+        '1,000.51' => Money.new(1_000_51),
+        '1,000.505' => Money.new(1_000_50), # ROUND_HALF_EVEN default bankers rounding
+        '1,000.515' => Money.new(1_000_52), # ROUND_HALF_EVEN default bankers rounding
+        '1,000.504' => Money.new(1_000_50),
+        '1,000.0000' => Money.new(1_000_00),
+        '1,000.5000' => Money.new(1_000_50),
+        '1,000.5099' => Money.new(1_000_51),
+        '1.550' => Money.new(1_55),
+        '25.' => Money.new(25_00),
+        '.75' => Money.new(75),
 
-        '7.21K'           => Money.new(7_210_00),
-        '1M'              => Money.new(1_000_000_00),
-        '1.2M'            => Money.new(1_200_000_00),
-        '1.37M'           => Money.new(1_370_000_00),
-        '3.1415927M'      => Money.new(3_141_592_70),
-        '.42B'            => Money.new(420_000_000_00),
-        '5T'              => Money.new(5_000_000_000_000_00),
+        '7.21K' => Money.new(7_210_00),
+        '1M' => Money.new(1_000_000_00),
+        '1.2M' => Money.new(1_200_000_00),
+        '1.37M' => Money.new(1_370_000_00),
+        '3.1415927M' => Money.new(3_141_592_70),
+        '.42B' => Money.new(420_000_000_00),
+        '5T' => Money.new(5_000_000_000_000_00),
 
-        '100 USD'         => Money.new(100_00, 'USD'),
-        '-100 USD'        => Money.new(-100_00, 'USD'),
-        '100 EUR'         => Money.new(100_00, 'EUR'),
-        '100.37 EUR'      => Money.new(100_37, 'EUR'),
-        '100,37 EUR'      => Money.new(100_37, 'EUR'),
-        '100,000.00 USD'  => Money.new(100_000_00, 'USD'),
-        '100.000,00 EUR'  => Money.new(100_000_00, 'EUR'),
-        '1,000 USD'       => Money.new(1_000_00, 'USD'),
-        '-1,000 USD'      => Money.new(-1_000_00, 'USD'),
-        '1,000.5500 USD'  => Money.new(1_000_55, 'USD'),
+        '100 USD' => Money.new(100_00, 'USD'),
+        '-100 USD' => Money.new(-100_00, 'USD'),
+        '100 EUR' => Money.new(100_00, 'EUR'),
+        '100.37 EUR' => Money.new(100_37, 'EUR'),
+        '100,37 EUR' => Money.new(100_37, 'EUR'),
+        '100,000.00 USD' => Money.new(100_000_00, 'USD'),
+        '100.000,00 EUR' => Money.new(100_000_00, 'EUR'),
+        '1,000 USD' => Money.new(1_000_00, 'USD'),
+        '-1,000 USD' => Money.new(-1_000_00, 'USD'),
+        '1,000.5500 USD' => Money.new(1_000_55, 'USD'),
         '-1,000.6500 USD' => Money.new(-1_000_65, 'USD'),
-        '1.550 USD'       => Money.new(1_55, 'USD'),
+        '1.550 USD' => Money.new(1_55, 'USD'),
 
-        'USD 100'         => Money.new(100_00, 'USD'),
-        'EUR 100'         => Money.new(100_00, 'EUR'),
-        'EUR 100.37'      => Money.new(100_37, 'EUR'),
-        'CAD -100.37'     => Money.new(-100_37, 'CAD'),
-        'EUR 100,37'      => Money.new(100_37, 'EUR'),
-        'EUR -100,37'     => Money.new(-100_37, 'EUR'),
-        'USD 100,000.00'  => Money.new(100_000_00, 'USD'),
-        'EUR 100.000,00'  => Money.new(100_000_00, 'EUR'),
-        'USD 1,000'       => Money.new(1_000_00, 'USD'),
-        'USD -1,000'      => Money.new(-1_000_00, 'USD'),
-        'USD 1,000.9000'  => Money.new(1_000_90, 'USD'),
-        'USD -1,000.090'  => Money.new(-1_000_09, 'USD'),
-        'USD 1.5500'      => Money.new(1_55, 'USD'),
+        'USD 100' => Money.new(100_00, 'USD'),
+        'EUR 100' => Money.new(100_00, 'EUR'),
+        'EUR 100.37' => Money.new(100_37, 'EUR'),
+        'CAD -100.37' => Money.new(-100_37, 'CAD'),
+        'EUR 100,37' => Money.new(100_37, 'EUR'),
+        'EUR -100,37' => Money.new(-100_37, 'EUR'),
+        'USD 100,000.00' => Money.new(100_000_00, 'USD'),
+        'EUR 100.000,00' => Money.new(100_000_00, 'EUR'),
+        'USD 1,000' => Money.new(1_000_00, 'USD'),
+        'USD -1,000' => Money.new(-1_000_00, 'USD'),
+        'USD 1,000.9000' => Money.new(1_000_90, 'USD'),
+        'USD -1,000.090' => Money.new(-1_000_09, 'USD'),
+        'USD 1.5500' => Money.new(1_55, 'USD'),
 
-        '$100 USD'        => Money.new(100_00, 'USD'),
-        '$1,194.59 USD'   => Money.new(1_194_59, 'USD'),
-        '$-1,955 USD'     => Money.new(-1_955_00, 'USD'),
+        '$100 USD' => Money.new(100_00, 'USD'),
+        '$1,194.59 USD' => Money.new(1_194_59, 'USD'),
+        '$-1,955 USD' => Money.new(-1_955_00, 'USD'),
         '$1,194.5900 USD' => Money.new(1_194_59, 'USD'),
         '$-1,955.000 USD' => Money.new(-1_955_00, 'USD'),
-        '$1.99000 USD'    => Money.new(1_99, 'USD')
-      }
+        '$1.99000 USD' => Money.new(1_99, 'USD')
+      }.freeze
 
       it 'works as documented' do
         STRING_TO_MONEY.each do |string, money|
@@ -230,9 +230,9 @@ describe Monetize, 'core extensions' do
           expect(hash.to_money).to eq(Money.new(100, 'USD'))
         end
       end
-        
+
       context 'when Money to_hash is used' do
-        subject(:hash) { { cents: 100, currency_iso: 'SGD' } }
+        subject(:hash) { {cents: 100, currency_iso: 'SGD'} }
 
         it 'converts Hash to Money, interpreting fractional as cents' do
           expect(hash.to_money).to eq(Money.new(100, 'SGD'))

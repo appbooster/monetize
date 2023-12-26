@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Monetize
   class Error < StandardError; end
 

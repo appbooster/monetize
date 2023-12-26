@@ -1,16 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class Hash
   def to_money(currency = nil)
-    money_hash = self.respond_to?(:with_indifferent_access) ? self.with_indifferent_access : self
+    money_hash = respond_to?(:with_indifferent_access) ? with_indifferent_access : self
 
-    hash_currency = if money_hash[:currency].is_a?(Hash)
-                      money_hash[:currency][:iso_code]
-                    elsif money_hash[:currency_iso] && !money_hash[:currency_iso].empty?
-                      money_hash[:currency_iso]
-                    else
-                      money_hash[:currency]
-                    end
+    hash_currency = Monetize.send(:calc_hash_currency, money_hash)
 
     Money.new(money_hash[:cents] || money_hash[:fractional], hash_currency || currency || Money.default_currency)
   end

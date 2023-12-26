@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require 'money'
 require 'monetize/core_extensions'
@@ -20,9 +20,8 @@ module Monetize
     # to true to enforce the delimiters set in the currency all the time.
     attr_accessor :enforce_currency_delimiters
 
-
-    # Where this set to true, the behavior for parsing thousands separators is changed to 
-    # expect that eg. €10.000 is EUR 10 000 and not EUR 10.000 - it's incredibly rare when parsing 
+    # Where this set to true, the behavior for parsing thousands separators is changed to
+    # expect that eg. €10.000 is EUR 10 000 and not EUR 10.000 - it's incredibly rare when parsing
     # human text that we're dealing with fractions of cents.
     attr_accessor :expect_whole_subunits
 
@@ -41,7 +40,7 @@ module Monetize
 
       Money.from_amount(amount, currency)
     rescue Money::Currency::UnknownCurrency => e
-      fail ParseError, e.message
+      raise ParseError, e.message
     end
 
     def parse_collection(input, currency = Money.default_currency, options = {})
@@ -56,7 +55,7 @@ module Monetize
     def from_fixnum(value, currency = Money.default_currency)
       Money.from_amount(value, currency)
     end
-    alias_method :from_integer, :from_fixnum
+    alias from_integer from_fixnum
 
     def from_float(value, currency = Money.default_currency)
       Money.from_amount(value, currency)
@@ -67,7 +66,8 @@ module Monetize
     end
 
     def from_numeric(value, currency = Money.default_currency)
-      fail ArgumentError, "'value' should be a type of Numeric" unless value.is_a?(Numeric)
+      raise ArgumentError, "'value' should be a type of Numeric" unless value.is_a?(Numeric)
+
       Money.from_amount(value, currency)
     end
 
@@ -75,7 +75,19 @@ module Monetize
       warn '[DEPRECATION] Monetize.extract_cents is deprecated. Use Monetize.parse().cents'
 
       money = parse(input, currency)
-      money.cents if money
+      money&.cents
+    end
+
+    private
+
+    def calc_hash_currency(money_hash)
+      if money_hash[:currency].is_a?(Hash)
+        money_hash[:currency][:iso_code]
+      elsif money_hash[:currency_iso] && !money_hash[:currency_iso].empty?
+        money_hash[:currency_iso]
+      else
+        money_hash[:currency]
+      end
     end
   end
 end

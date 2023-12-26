@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require 'spec_helper'
 require 'monetize'
@@ -97,10 +97,14 @@ describe Monetize do
             context 'amount suffixes' do
               it 'parses formatted inputs with amounts given with suffixes' do
                 expect(Monetize.parse("#{symbol}1.26K")).to eq Money.new(1_260 * currency.subunit_to_unit, iso_code)
-                expect(Monetize.parse("#{symbol}126.36M")).to eq Money.new(126_360_000 * currency.subunit_to_unit, iso_code)
-                expect(Monetize.parse("#{symbol}.45B")).to eq Money.new(450_000_000 * currency.subunit_to_unit, iso_code)
-                expect(Monetize.parse("-#{symbol}2.45B")).to eq Money.new(-2_450_000_000 * currency.subunit_to_unit, iso_code)
-                expect(Monetize.parse("#{symbol}1.65T")).to eq Money.new(1_650_000_000_000 * currency.subunit_to_unit, iso_code)
+                expect(Monetize.parse("#{symbol}126.36M")).to eq Money.new(126_360_000 * currency.subunit_to_unit,
+                                                                           iso_code)
+                expect(Monetize.parse("#{symbol}.45B")).to eq Money.new(450_000_000 * currency.subunit_to_unit,
+                                                                        iso_code)
+                expect(Monetize.parse("-#{symbol}2.45B")).to eq Money.new(-2_450_000_000 * currency.subunit_to_unit,
+                                                                          iso_code)
+                expect(Monetize.parse("#{symbol}1.65T")).to eq Money.new(1_650_000_000_000 * currency.subunit_to_unit,
+                                                                         iso_code)
               end
             end
 
@@ -257,7 +261,7 @@ describe Monetize do
       let(:float)       { 10.0 }
       let(:big_decimal) { BigDecimal('10') }
 
-      [:integer, :float, :big_decimal].each do |type|
+      %i[integer float big_decimal].each do |type|
         it "returns a new Money object based on the #{type} input" do
           money = Monetize.parse(send(type), 'USD')
 
@@ -345,8 +349,8 @@ describe Monetize do
       end
     end
 
-    describe "expecting whole subunits" do
-      before(:all) do 
+    describe 'expecting whole subunits' do
+      before(:all) do
         Monetize.expect_whole_subunits = true
         Monetize.assume_from_symbol = true
       end
@@ -356,14 +360,14 @@ describe Monetize do
         Monetize.assume_from_symbol = false
       end
 
-      it "handles euros" do
+      it 'handles euros' do
         expect(Monetize.parse('€10,000')).to eq Money.new(10_000_00, 'EUR')
         expect(Monetize.parse('€10,00')).to eq Money.new(10_00, 'EUR')
         expect(Monetize.parse('€10.00')).to eq Money.new(10_00, 'EUR')
         expect(Monetize.parse('EUR 10,000.00')).to eq Money.new(10_000_00, 'EUR')
       end
 
-      it "handles GBP" do
+      it 'handles GBP' do
         expect(Monetize.parse('£10,000')).to eq Money.new(10_000_00, 'GBP')
         expect(Monetize.parse('£10.000')).to eq Money.new(10_000_00, 'GBP')
         expect(Monetize.parse('£10,00')).to eq Money.new(10_00, 'GBP')
@@ -527,11 +531,11 @@ describe Monetize do
 
     context 'infinite_precision = true' do
       before do
-        Money.infinite_precision = true
+        Money.default_infinite_precision = true
       end
 
       after do
-        Money.infinite_precision = false
+        Money.default_infinite_precision = false
       end
 
       it 'keeps precision' do
@@ -591,9 +595,9 @@ describe Monetize do
 
       Monetize.extract_cents('100')
 
-      expect(Monetize)
-        .to have_received(:warn)
-        .with('[DEPRECATION] Monetize.extract_cents is deprecated. Use Monetize.parse().cents')
+      expect(Monetize).
+        to have_received(:warn).
+        with('[DEPRECATION] Monetize.extract_cents is deprecated. Use Monetize.parse().cents')
     end
 
     it 'extracts cents from a given string' do

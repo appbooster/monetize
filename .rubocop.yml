@@ -14,6 +14,12 @@ Style/ClassAndModuleChildren:
   Enabled: false
 Style/PerlBackrefs:
   Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - 'spec/**/*'
 
 Style/CollectionMethods:
   Enabled: yes
@@ -30,3 +36,6 @@ Style/EmptyElse:
   EnforcedStyle: empty
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+
+AllCops:
+  TargetRubyVersion: '3.2'

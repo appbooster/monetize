@@ -1,5 +1,6 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+# frozen_string_literal: true
+
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'monetize/version'
 require 'English'
@@ -24,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake', '~> 10.2'
   spec.add_development_dependency 'rspec', '~> 3.0'
+  spec.required_ruby_version = '~> 3.2'
 
   if spec.respond_to?(:metadata)
     spec.metadata['changelog_uri'] = 'https://github.com/RubyMoney/monetize/blob/master/CHANGELOG.md'
