@@ -56,7 +56,8 @@ module Monetize
 
       negative, num = extract_sign(num)
 
-      num.chop! if num =~ /[.|,]$/
+      num.chop! if num =~ /[.,]$/
+      num = num[1..-1] if num =~ /^[.,]/ && num=~/[\d.,][.,]\d/ # in case currency contained .,
 
       major, minor = extract_major_minor(num, currency)
 
