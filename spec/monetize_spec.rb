@@ -374,6 +374,11 @@ describe Monetize do
         expect(Monetize.parse('£10.00')).to eq Money.new(10_00, 'GBP')
       end
     end
+
+    describe 'exceptional cases' do
+      it { expect(Monetize.parse('0.00 $US')).to eq Money.new(0, 'USD') }
+      it { expect(Monetize.parse('6.99 $US')).to eq Money.new(6_99, 'USD') }
+    end
   end
 
   describe '.parse!' do

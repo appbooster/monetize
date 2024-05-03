@@ -35,7 +35,7 @@ module Monetize
       '₪' => 'ILS'
     }.freeze
 
-    EXCEPTIONAL_SYMBOLS = %w[HK NT RM TL NIS].freeze
+    EXCEPTIONAL_SYMBOLS = %w[HK NT RM TL NIS US].freeze
     MULTIPLIER_SUFFIXES = Hash.new(0).merge({'K' => 3, 'M' => 6, 'B' => 9, 'T' => 12}).freeze
     MULTIPLIER_REGEXP = Regexp.new(format('^(.*?\d)(%s)\b([^\d]*)$', MULTIPLIER_SUFFIXES.keys.join('|')), 'i')
 
