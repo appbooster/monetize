@@ -25,6 +25,7 @@ module Monetize
       'zł' => 'PLN',
       '₸' => 'KZT',
       '₩' => 'KRW',
+      '￦' => 'KRW',
       'S$' => 'SGD',
       'HK$' => 'HKD',
       'NT$' => 'TWD',
